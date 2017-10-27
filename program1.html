@@ -1,0 +1,93 @@
+<html>
+
+<head>
+    <title>Program 1</title>
+    <meta description="Author" content="Saif Ali" />
+    <style>
+        .container {
+            margin: 10 auto;
+            max-width: 1000px;
+            background: #d3d3d3;
+            display: block;
+            overflow: hidden;
+            padding: 20px;
+        }
+        
+        .cont2 {
+            margin: 0px 10px 10px 10px;
+            padding: 5px;
+            display: block;
+            overflow: hidden;
+        }
+        
+        .italic {
+            font-style: italic;
+        }
+        
+        .oblique {
+            font-style: oblique;
+        }
+        
+        .one-third {
+            width: calc(30% - 5px);
+            float: left;
+            padding: 5px;
+            min-height: 250px;
+            border: 1px solid black;
+            background-image: url("img.jpg");
+        }
+        
+        .mylink {
+            color: red;
+            text-decoration: none;
+        }
+        
+        .mylink:hover {
+            color: blue;
+            text-decoration: underline;
+            font-style: oblique;
+        }
+        
+        .mylink:visited {
+            color: purple;
+            text-decoration: none;
+            font-style: italic;
+        }
+        
+        .mylink:active {
+            color: green;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>1. Different font styles </h1>
+        <div class="cont2">
+            <p>This is normal font</p>
+            <p class="italic">This is italicized font</p>
+            <p class="oblique">This is oblique font</p>
+        </div>
+        <hr>
+        <h1>2. Repeated image </h1>
+        <div class="cont2">
+            <div class="one-third" style="background-repeat:repeat-y;"></div>
+            <div class="one-third" style="background-repeat:repeat-x;"></div>
+            <div class="one-third" style="background-repeat:repeat;"></div>
+        </div>
+        <hr>
+        <h1>3. Link styles </h1>
+        <div class="cont2">
+            <a class="mylink" href="#">This is a dummy link</a>
+        </div>
+        <hr>
+        <h1>4. Element visibility </h1>
+        <div class="cont2">
+            <div class="one-third">Visibility:default(visible)</div>
+            <div class="one-third" style="visibility:hidden">Visibility:hidden</div>
+            <div class="one-third" style="visibility:collapse">Visibility:collapsed</div>
+        </div>
+    </div>
+</body>
+
+</html>

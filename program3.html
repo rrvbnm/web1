@@ -1,0 +1,75 @@
+<html>
+
+<head>
+    <h1 align=center>Welcome to Validation Checking</h1>
+    <hr width=50%>
+
+</head>
+<title> Validation Check! </title>
+
+<body>
+    <table align=center border=1>
+        <tr>
+            <td>Register No:</td>
+            <td><input type="text" id="reg" /></td>
+        </tr>
+        <tr>
+            <td>Subject:</td>
+            <td><input type="text" id="subj" /></td>
+        </tr>
+        <tr>
+            <td>Marks 1:</td>
+            <td><input type="number" id="mrk1" /></td>
+        </tr>
+        <tr>
+            <td>Marks 2:</td>
+            <td><input type="number" id="mrk2" /></td>
+        </tr>
+        <tr>
+            <td>Marks 3:</td>
+            <td><input type="number" id="mrk3" /></td>
+        </tr>
+        <tr>
+            <td>
+                <input type="submit" onclick="validate();" />
+            </td>
+            <td>
+                <input type="reset" onclick="reset();" />
+            </td>
+        </tr>
+
+    </table>
+
+    <span id="Result"></span>
+    <script language="javascript">
+        var rg = document.getElementById("reg");
+        var sb = document.getElementById("subj");
+        var m1 = document.getElementById("mrk1");
+        var m2 = document.getElementById("mrk2");
+        var m3 = document.getElementById("mrk3");
+
+        function reset() {
+            rg.value = "";
+            sb.value = "";
+            m1.value = m2.value = m3.value = "";
+        }
+
+        function validate() {
+            var m1v = m1.value;
+            var m2v = m2.value;
+            var m3v = m3.value;
+            if (m1v > 100 || m2v > 100 || m3v > 100 || m1v < 0 || m2v < 0 || m3v < 0) {
+                alert("Wrong inputs");
+                f.reset();
+            }
+            var arr = [parseInt(m1v), parseInt(m2v), parseInt(m3v)];
+            arr = arr.sort(function(a, b) {
+                return b - a
+            });
+            var avg = (arr[0] + arr[1]) / 2.00;
+            document.getElementById("Result").innerHTML = ("Average of 2 max marks is " + avg);
+        }
+    </script>
+</body>
+
+</html>
