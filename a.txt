@@ -1,0 +1,630 @@
+1)
+10.24.30.8
+
+1.html(in /var/www/html/folder)
+<html>
+    <form action="http://10.24.30.8/cgi-bin/clk.pl">
+        <center>
+            <input type=submit value=Click_to_display_time>
+        </center>
+    </form>
+ </html>
+
+clk.pl(in /var/www/cgi-bin chmod 777 clk.pl)
+#!/usr/bin/perl
+use CGI ':standard';
+print "Refresh: 1\n";
+print header();
+start_html(-title=>"Digital clock",-bgcolor=>"red",-text=>"yellow");
+($s,$m,$h,$day,$mon,$year)=localtime(time);
+$datetime=localtime;
+if($h==12)
+{
+$ampm="pm";
+}
+elsif($h>=13)
+{
+$ampm="pm";
+$h=$h-12;
+}
+else
+{
+$ampm="am";
+}
+print br,br,"The current system is $h:$m:$s $ampm<br>";
+$mon++;
+$year=$year+1900;
+print "Date:$day/$mon/$year<br>";
+print h1,"$datetime";
+print end_html();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+2)
+
+2.html
+<html>
+<head>
+    <title> Visitor Count </title>
+    <link href="styles.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <div class="container">
+        <div class="box-cont">
+            <div class="box-header" style="text-align:center;">
+                <h1>Hello !</h1>
+            </div>
+            <div class="box">
+                Hello Visitor!!
+                </br>
+                Display the visitor count
+                </br>
+                <form action="http://10.24.30.8/cgi-bin/k2.pl">
+                    <center><br><input type="submit" value="Display"><br></center>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+k2.pl
+#!/usr/bin/perl
+# Write a Perl program to keep track of the number of visitors visiting the web page and to
+# display this count of visitors, with proper headings. (use file handling)
+use strict;
+use CGI':standard';
+my $count;
+open (FILE, "<kvisit.txt");
+$count=<FILE>;
+close(FILE);
+open(FILE, ">kvisit.txt");
+$count++;
+print FILE "$count";
+close(FILE);
+print header;
+print start_html(
+    -head => [
+      Link( { -href => 'styles.css', -rel => 'stylesheet', -type => 'text/css'}),
+    ]);
+print "<div class=\"container\">
+        <div class=\"box-cont\">
+            <div class=\"box-header\">
+                VISITOR COUNT
+            </div>
+            <div class=\"box\">";
+print "<center><h1>You are the visitor number $count";
+print "</div>
+         </div>
+        </div>";
+print end_html( );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+3)
+general instructions:
+open mysql
+
+mysql -u cs7b1 -p
+
+enter password: cs7123$
+
+create a db : create database college
+
+use the db : use college
+
+
+
+store program3.pl in /var/www/html/cgi-bin (give chmod 777 program3.pl)
+
+store html file in /var/www/html/foldername
+
+
+run html from local
+
+
+to check if perl file is running
+
+perl -w filename.pl
+
+3.html
+<html>
+<head>
+    <title> MySQL - Perl </title>
+    <!--link href="styles.css" rel="stylesheet" type="text/css"-->
+</head>
+
+<body>
+                <h1>Hello Visitor!!</h1>
+                </br>
+                <h2>Enter your information</h2>
+                </br>
+                <form action="http://10.24.30.8/cgi-bin/program3.pl">
+                    <table style="text-align:center;margin:20px auto">
+                        <tr>
+                            <td>Name:</td>
+                            <td><input type="text" name="name" /></td>
+                        </tr>
+                        <tr>
+                            <td>Age:</td>
+                            <td><input type="number" name="age" /></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><input type="submit" value="Submit" /></td>
+                        </tr>
+                    </table>
+                </form>
+</body>
+
+</html>
+
+program3.pl
+#!/usr/bin/perl
+# Using XHTML, PERL and MySQL, Write a program to insert name and age information
+# entered by the user into a table and display the current contents of this table
+use CGI':standard';
+use DBI;
+$nam=param("name");
+$age=param("age");
+$con=DBI->connect("DBI:mysql:college","cs7b1","cs7123\$");
+$res=$con->prepare("create table if not exists student(name varchar(45), age int)");
+$res->execute() or die("Error in creation");
+$res=$con->prepare("insert into student values('$nam','$age')");
+$res->execute();
+$res=$con->prepare("select * from student");
+$res->execute();
+
+print header;
+#print start_html(
+#   -head => [
+#      Link( { -href => 'styles.css', -rel => 'stylesheet', -type => 'text/css'}),
+#    ]);
+print "<div class=\"container\">
+        <div class=\"box-cont\">
+            <div class=\"box-header\" style=\"text-align:center;\">
+                STUDENT DATABASE
+            </div>
+            <div class=\"box\">";
+    print "<center><table class=\"ntable\">";
+    print "<tr><th>NAME</th><th>AGE</th></tr>";
+        while(@a=$res->fetchrow_array())
+        {
+            print "<tr><td>$a[0]</td><td>$a[1]</td></tr>";
+        }
+    print "</table></center>";
+$res->finish();
+$con->disconnect();
+print "</div>
+         </div>
+        </div>";
+print end_html( );
+
+styles.css
+body {
+    background: url("img.jpg");
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.box-header {
+    padding: 10px;
+    font-size: 20px;
+    text-transform: uppercase;
+    background: #A5A5E5;
+}
+
+.box-cont {
+    border: 1px solid #E0E0E0;
+    margin: 10px;
+}
+
+.box {
+    padding: 10px 10px 10px 30px;
+    background: white;
+    display: block;
+    overflow: hidden;
+}
+
+.italic {
+    font-style: italic;
+}
+
+.oblique {
+    font-style: oblique;
+}
+
+.one-third {
+    width: calc(30% - 5px);
+    float: left;
+    padding: 5px;
+    min-height: 250px;
+    border: 1px solid black;
+    background-image: url("img.jpg");
+}
+
+.mylink {
+    color: red;
+    text-decoration: none;
+}
+
+.mylink:hover {
+    color: blue;
+    text-decoration: underline;
+    font-style: oblique;
+}
+
+.mylink:visited {
+    color: purple;
+    text-decoration: none;
+    font-style: italic;
+}
+
+.mylink:active {
+    color: green;
+}
+
+table {
+    border: 0px;
+}
+
+table th,
+table td {
+    font-size: 15px !important;
+    text-align: center !important;
+    border: 0px;
+    padding: 5px;
+}
+
+.ntable {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+.ntable th,
+.ntable td {
+    font-size: 15px !important;
+    text-align: center !important;
+    border: 1px solid black;
+    padding: 5px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+4)
+GS:
+save in /var/www/html/foldername - php file
+
+open php file from the local firefox browser
+
+4.php
+
+
+<!-- Write a PHP program to store current date-time in a COOKIE and display the “Last visited on
+‟date-time on the web page upon reopening of the same page. -->
+
+<html>
+
+<head>
+    <title> PHP - Cookies </title>
+    <link href="styles.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="box-cont">
+            <div class="box-header" style="text-align:center;">
+                <h2>Cookie Power</h2>
+            </div>
+            <div class="box" style="text-align:center;">
+                Hello Visitor!!
+                </br>
+                <?php
+                    $duration=time()+60*60*24*60;
+                    $found=0;
+                    $visit=0;
+                    if(isset($_COOKIE[$visit]))
+                    {
+                    $found=1;
+                    $lastvisit=$_COOKIE[$visit];
+                    }
+                    setcookie($visit,date("m/d/y-G:i:s"),$duration);
+                    print "<center>";
+                    if($found==1)
+                    {
+                    print "<h2>Welcome back, You have visited on
+                    $lastvisit</h2>";
+                    }
+                    else
+                    {
+                    print "<h3>Welcome to this website</h3>";
+                    }
+                    print "</center>";
+                ?>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+
+
+
+
+styles.css
+
+
+body {
+    background: url("img.jpg");
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.box-header {
+    padding: 10px;
+    font-size: 20px;
+    text-transform: uppercase;
+    background: #A5A5E5;
+}
+
+.box-cont {
+    border: 1px solid #E0E0E0;
+    margin: 10px;
+}
+
+.box {
+    padding: 10px 10px 10px 30px;
+    background: white;
+    display: block;
+    overflow: hidden;
+}
+
+.italic {
+    font-style: italic;
+}
+
+.oblique {
+    font-style: oblique;
+}
+
+.one-third {
+    width: calc(30% - 5px);
+    float: left;
+    padding: 5px;
+    min-height: 250px;
+    border: 1px solid black;
+    background-image: url("img.jpg");
+}
+
+.mylink {
+    color: red;
+    text-decoration: none;
+}
+
+.mylink:hover {
+    color: blue;
+    text-decoration: underline;
+    font-style: oblique;
+}
+
+.mylink:visited {
+    color: purple;
+    text-decoration: none;
+    font-style: italic;
+}
+
+.mylink:active {
+    color: green;
+}
+
+table {
+    border: 0px;
+}
+
+table th,
+table td {
+    font-size: 15px !important;
+    text-align: center !important;
+    border: 0px;
+    padding: 5px;
+}
+
+.ntable {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+.ntable th,
+.ntable td {
+    font-size: 15px !important;
+    text-align: center !important;
+    border: 1px solid black;
+    padding: 5px;
+
+
+
+
+
+
+
+
+
+
+
+
+5)
+
+51.php
+
+<html>
+
+<head>
+    <title> PHP Cookie Validation </title>
+    <link href="styles.css" rel="stylesheet" type="text/css">
+</head>
+<?php
+    if(!isset($_COOKIE["user1"]))
+    {
+        setcookie("user1","pwd1");
+        setcookie("user2","pwd2");
+        setcookie("user3","pwd3");
+        setcookie("user4","pwd4");
+    }
+    
+?>
+
+<body>
+    <div class="container">
+        <div class="box-cont">
+            <div class="box-header" style="text-align:center;">
+                Login
+            </div>
+            <div class="box" style="text-align:center">
+                Enter your credentials
+                </br>
+                <form action="52.php" method="post">
+                    <table style="text-align:center;margin:20px auto">
+                        <tr>
+                            <td>Name:</td>
+                            <td><input type="text" name="name" /></td>
+                        </tr>
+                        <tr>
+                            <td>Password:</td>
+                            <td><input type="password" name="pwd" /></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><input type="submit" value="Submit" /></td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+
+---------------------------------------------------------------------------------------
+52.php
+
+<html>
+
+<head>
+    <title> PHP Cookie Validation </title>
+    <link href="styles.css" rel="stylesheet" type="text/css" >
+</head>
+
+
+<body>
+    <div class="container">
+        <div class="box-cont">
+            <div class="box-header" style="text-align:center;">
+                Login
+            </div>
+            <div class="box" style="text-align:center;">
+            <?php
+                $user = $_POST['name'];
+                $pwd = $_POST['pwd'];
+                if(isset($_COOKIE[$user])){
+                    if($_COOKIE[$user] == $pwd){
+                        print "<h2> Welcome $user</h1>";
+                    }
+                    else
+                        print "<h2> You're not an authenticated user";
+                }
+                else
+                    print "<h2> You're not an authenticated user";
+                
+            ?>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
